@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package protobuf_oneof;
+
+option go_package = "protobuf-oneof/pb";
+
+message MyMessage {
+  oneof data {
+    string name = 1;
+    int32 age = 2;
+    bool is_student = 3;
+  }
+}
