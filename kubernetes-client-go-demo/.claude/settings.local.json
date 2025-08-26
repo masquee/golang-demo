@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(go mod:*)",
+      "Bash(go build:*)",
+      "Bash(kubectl config:*)",
+      "Bash(chmod:*)",
+      "Bash(./capture-with-tls-keys.sh:*)",
+      "Bash(./run-with-logging.sh)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
