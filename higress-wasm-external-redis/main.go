@@ -78,7 +78,7 @@ func onHttpRequestHeaders(ctx wrapper.HttpContext, config RedisCallConfig, log l
 					proxywasm.ResumeHttpRequest()
 				})
 				if err != nil {
-					log.Errorf("Error occured while calling redis, it seems cannot find the redis cluster.")
+					log.Errorf("Error occured while calling redis, it seems cannot find the redis cluster: %v", err)
 					proxywasm.ResumeHttpRequest()
 				}
 			} else {

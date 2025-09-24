@@ -81,7 +81,7 @@ func onHttpRequestHeaders(ctx wrapper.HttpContext, config MyConfig, log logs.Log
 
 	if err != nil {
 		// 由于调用外部服务失败，放行请求，记录日志
-		log.Errorf("Error occured while calling http, it seems cannot find the service cluster.")
+		log.Errorf("Error occured while calling http, it seems cannot find the service cluster: %v", err)
 		return types.ActionContinue
 	} else {
 		// 需要等待异步回调完成，返回 HeaderStopAllIterationAndWatermark 状态，可以被 ResumeHttpRequest 恢复
