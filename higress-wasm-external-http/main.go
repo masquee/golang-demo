@@ -49,6 +49,8 @@ func parseConfig(json gjson.Result, config *MyConfig, log logs.Log) error {
 			servicePort = 80
 		}
 	}
+	log.Infof("config parsed success, serviceName: %s, servicePort: %d", serviceName, servicePort)
+	// 这里直接调用调不通，wasm-go 里写死了会按照 fmt.Sprintf("outbound|%d||%s", c.Port, c.FQDN) 的格式去找 cluster
 	config.client = wrapper.NewClusterClient(wrapper.FQDNCluster{
 		FQDN: serviceName,
 		Port: servicePort,
@@ -61,6 +63,7 @@ func onHttpRequestHeaders(ctx wrapper.HttpContext, config MyConfig, log logs.Log
 	err := config.client.Get(config.requestPath, nil,
 		// 回调函数，将在响应异步返回时被执行
 		func(statusCode int, responseHeaders http.Header, responseBody []byte) {
+			log.Infof("http call returned")
 			// 请求没有返回 200 状态码，进行处理
 			if statusCode != http.StatusOK {
 				log.Errorf("http call failed, status: %d", statusCode)

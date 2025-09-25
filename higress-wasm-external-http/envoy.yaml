@@ -27,6 +27,14 @@ static_resources:
                       domains: ["*"]
                       routes:
                         - match:
+                            prefix: "/user-agent"
+                          route:
+                            cluster: go-httpbin
+                          response_headers_to_add:
+                            - header:
+                                key: "x-powered-by"
+                                value: "go-httpbin"
+                        - match:
                             prefix: "/"
                           route:
                             cluster: httpbin
@@ -49,8 +57,8 @@ static_resources:
                               {
                                 "tokenHeader": "X-XXX-Token",
                                 "requestPath": "/get",
-                                "serviceName": "http://httpbin.org",
-                                "servicePort": 80
+                                "serviceName": "go-httpbin",
+                                "servicePort": 8080
                               }
                   - name: envoy.filters.http.router
                     typed_config:
@@ -71,3 +79,17 @@ static_resources:
                     socket_address:
                       address: httpbin
                       port_value: 80
+    - name: go-httpbin
+      connect_timeout: 30s
+      type: LOGICAL_DNS
+      dns_lookup_family: V4_ONLY
+      lb_policy: ROUND_ROBIN
+      load_assignment:
+        cluster_name: go-httpbin
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: go-httpbin
+                      port_value: 8080

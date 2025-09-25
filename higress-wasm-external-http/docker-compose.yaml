@@ -6,10 +6,12 @@ services:
     command: -c /etc/envoy/envoy.yaml --component-log-level wasm:debug
     depends_on:
       - httpbin
+      - go-httpbin
     networks:
       - wasmtest
     ports:
       - "10000:10000"
+      - "9901:9901"
     volumes:
       - ./envoy.yaml:/etc/envoy/envoy.yaml
       - ./main.wasm:/etc/envoy/main.wasm
@@ -20,6 +22,15 @@ services:
       - wasmtest
     ports:
       - "12345:80"
+
+  go-httpbin:
+    image: mccutchen/go-httpbin:latest
+    networks:
+      - wasmtest
+    ports:
+      - "12347:8080"
+    environment:
+      - PORT=8080
 
 networks:
   wasmtest: {}
